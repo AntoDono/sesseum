@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="z-10 relative top-0 right-20 slant skew-x-6 bg-gradient-to-bl from-torange to-tdred h-screen w-7/12">
+        <div class="z-10 relative top-0 right-12 slant skew-x-6 bg-gradient-to-bl from-torange to-tdred h-screen w-7/12">
 
         </div>
         <div class="z-10 absolute top-0 left-0 h-screen w-6/12">
@@ -13,7 +13,7 @@
             <img class="h-screen" src="../assets/images/amongus.jpg">
         </div> -->
         <client-only>
-            <Amongus/>
+            <Amongus class="z-0 absolute top-0 right-0"/>
         </client-only>
     </div>
 </template>
