@@ -1,10 +1,13 @@
 <template>
-    <div class="flex items-center bg-black justify-between">
-        <h1 class="text-white text-5xl">Susseum</h1>
+    <div class="p-2 flex items-center bg-tdark justify-between">
+        <h1 class="
+            text-white text-6xl font-redressed 
+            text-transparent bg-clip-text bg-gradient-to-bl from-tred to-torange
+        ">Susseum</h1>
         <ul class="list-none">
-            <a href="." class="p-1 inline text-white">Demo</a>
-            <a href="." class="p-1 inline text-white">About</a>
-            <a href="." class="p-1 inline text-white">Solutions</a>
+            <a href="." class="text-torange text-1xl p-1 inline font-redressed transition duration-150 border-b-2 border-transparent hover:border-torange">Demo</a>
+            <a href="." class="text-torange text-1xl p-1 inline font-redressed transition duration-150 border-b-2 border-transparent hover:border-torange">About</a>
+            <a href="." class="text-torange text-1xl p-1 inline font-redressed transition duration-150 border-b-2 border-transparent hover:border-torange">Solutions</a>
         </ul>
     </div>
 </template>

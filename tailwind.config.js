@@ -7,7 +7,17 @@ module.exports = {
     "./nuxt.config.{js,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily:{
+        'redressed': ['Redressed', 'cursive']
+      },
+      colors: {
+        'tdark': '#325863',
+        'torange': '#D99A3D',
+        'tred': '#F75151',
+        'tdred': '#8F282B'
+      }
+    },
   },
   plugins: [],
 }
