@@ -48,5 +48,8 @@ export default {
         autoprefixer: {},
       },
     },
+    transpile: [
+      'three'
+    ]
   }
 }
