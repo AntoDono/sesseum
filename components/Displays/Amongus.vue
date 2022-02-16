@@ -1,5 +1,5 @@
 <template>
-    <canvas class="webgl border-2 border-black"></canvas>
+    <canvas class="webgl"></canvas>
 </template>
 
 <script>
@@ -24,12 +24,17 @@ export default {
                 lights:{
                     spotLight: null,
                     ambientLight: null,
+                },
+                models:{
+                    loaded: [],
+                    amongus: null,
                 }
             },
             loaders:{
                 gltfLoader: null,
                 dracoLoader: null,
                 loadingManager: null,
+                textureLoader: null,
             }
         }
     },
@@ -60,7 +65,14 @@ export default {
             wall.position.set(position.x || 0, position.y || 0, position.z || 0)
             this.graphics.scene.add(wall)
         },
-        load_model(path, propname, coords={x:0,y:0,z:0}, rotation={x:0, y:0, z:0}, scale={x:1, y:1, z:1} ){
+        load_model(
+            {
+                path, propname, position={x:0,y:0,z:0}, 
+                rotation={x:0, y:0, z:0}, scale={x:1, y:1, z:1},
+                store=false
+            }
+            ={}
+        ){
             this.loaders.gltfLoader.load(
                 path,
                 (gltf) =>
@@ -69,9 +81,9 @@ export default {
 
                     prop.name = propname
 
-                    prop.position.x = coords.x || 0
-                    prop.position.y = coords.y || 0
-                    prop.position.z = coords.z || 0
+                    prop.position.x = position.x || 0
+                    prop.position.y = position.y || 0
+                    prop.position.z = position.z || 0
                     
                     prop.rotation.x = rotation.x || 0
                     prop.rotation.y = rotation.y || 0
@@ -83,9 +95,14 @@ export default {
 
                     prop.receiveShadow = true
 
+                    this.graphics.models.loaded.push(prop)
+
                     this.graphics.scene.add(prop)
 
-                    console.log(prop)
+                    if (store!=false){
+                        this.graphics.models[store] = prop
+                        console.log(this.graphics.models)
+                    }
 
                 }
             )
@@ -93,7 +110,7 @@ export default {
         },
         tick(){
             this.graphics.renderer.render(this.graphics.scene, this.graphics.camera)
-            // this.graphics.controls.update()
+            this.graphics.controls.update()
             window.requestAnimationFrame(this.tick)
         },
         init(){
@@ -108,16 +125,19 @@ export default {
             this.graphics.scene.add(this.graphics.camera)
 
             this.graphics.controls = new OrbitControls( this.graphics.camera, canvas );
+            this.graphics.controls.autoRotate = true
+            this.graphics.controls.enableZoom = true
+            this.graphics.controls.autoRotateSpeed = 10
             this.graphics.controls.enableDamping = true
 
-            this.graphics.camera.position.set(0,3.5,5)
-            this.graphics.camera.rotation.set(-Math.PI/8,0,0)
+            this.graphics.camera.lookAt(this.graphics.models.amongus.position)
+            this.graphics.camera.position.set(0,6,0)
+            this.graphics.camera.zoom = 1
 
-            // const geometry = new THREE.BoxGeometry();
-            // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-            // const cube = new THREE.Mesh( geometry, material );
-            // cube.rotation.set(1,1,1)
-            // this.graphics.scene.add( cube );
+            const geometry = new THREE.CylinderGeometry( 1, 1, 4, 32 );
+            const material = new THREE.MeshBasicMaterial( {color: "white"} );
+            const cylinder = new THREE.Mesh( geometry, material );
+            this.graphics.scene.add( cylinder );
 
             this.graphics.camera.position.z = 5;
 
@@ -136,7 +156,8 @@ export default {
                 this.graphics.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
             })
 
-            this.graphics.lights.spotLight = new THREE.SpotLight( 0xffffff, 5, 100 ); // Adds spot light
+            this.graphics.lights.spotLight = new THREE.SpotLight( 0xffffff, 2.5, 50 ); // Adds spot light
+            this.graphics.lights.spotLight.angle = Math.PI/16
             this.graphics.lights.spotLight.position.set( 0, 10, 0 );
 
             this.graphics.lights.ambientLight = new THREE.AmbientLight( "#b0b0b0" ); // soft white light
@@ -163,6 +184,7 @@ export default {
         this.loaders.loadingManager = new THREE.LoadingManager(
             ()=>{ // Done loading callback
                 console.log("Done loading")
+                this.init()
             },
             (itemUrl, itemsLoaded, itemsTotal)=>{ // Progress call back
                 let percent = itemsLoaded/itemsTotal
@@ -177,9 +199,13 @@ export default {
         this.loaders.gltfLoader = new GLTFLoader(this.loaders.loadingManager)
         this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader)
 
-        this.load_model('blender/amongus/scene.gltf')
+        this.loaders.textureLoader = new THREE.TextureLoader(this.load                                                                                                                               )
+        this.load_model({
+            path: 'blender/amongus/scene.gltf',
+            position: {y:2},
+            store: "amongus"
+        })
 
-        this.init()
     }
 }
 </script>
