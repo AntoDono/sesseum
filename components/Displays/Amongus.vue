@@ -21,6 +21,7 @@ export default {
                 camera: null,
                 controls: null,
                 renderer: null,
+                fog: null,
                 sizes: {
                     width: window.innerWidth/this.divider,
                     height: window.innerHeight
@@ -41,7 +42,8 @@ export default {
                     concrete: {
                         normal: null,
                         color: null
-                    }
+                    },
+                    background: null
                 }
             },
             loaders:{
@@ -136,6 +138,13 @@ export default {
             this.graphics.renderer = new THREE.WebGLRenderer({
                 canvas: canvas
             })
+            
+            this.graphics.scene.background = this.graphics.textures.background
+
+            this.graphics.fog = new THREE.Fog("black",25, 500)
+
+            this.graphics.scene.fog = this.graphics.fog
+
             this.graphics.renderer.setSize(this.graphics.sizes.width, this.graphics.sizes.height)
             this.graphics.camera = new THREE.PerspectiveCamera(75, this.graphics.sizes.width / this.graphics.sizes.height, 0.1, 100)
             this.graphics.scene.add(this.graphics.camera)
@@ -144,17 +153,19 @@ export default {
 
             if (!this.interactive) {
                 this.graphics.controls.enabled = false
-            this.graphics.controls.autoRotate = true
+                this.graphics.controls.autoRotate = true
             }
 
             this.graphics.controls.enableZoom = true
+            this.graphics.controls.maxDistance = 50
+            this.graphics.controls.minDistance = 1
             this.graphics.controls.autoRotateSpeed = 7
             this.graphics.controls.enableDamping = true
             this.graphics.controls.maxPolarAngle = Math.PI/2.1
 
 
-            this.graphics.camera.lookAt(this.graphics.models.amongus.position)
             this.graphics.camera.position.set(0,6,0)
+            this.graphics.controls.target = this.graphics.models.amongus.position
 
             const geometry = new THREE.CylinderGeometry( 1, 1, 4, 32 );
             const material = new THREE.MeshStandardMaterial({
@@ -189,8 +200,8 @@ export default {
 
             // Adds floor
             this.addWall({
-                length: 100,
-                width: 100,
+                length: 200,
+                width: 200,
                 roughness: 0.5,
                 rotation: {x: - Math.PI/2},
                 map: this.graphics.textures.floor.color,
@@ -232,13 +243,15 @@ export default {
 
         this.graphics.textures.floor.color = this.loaders.textureLoader.load('/textures/color/floor.jpg')
         this.graphics.textures.floor.normal = this.loaders.textureLoader.load('/textures/normals/floor.jpg')
-        this.enableRepeat(this.graphics.textures.floor.normal, 10, 10)
-        this.enableRepeat(this.graphics.textures.floor.color, 10, 10)
+        this.enableRepeat(this.graphics.textures.floor.normal, 20, 20)
+        this.enableRepeat(this.graphics.textures.floor.color, 20, 20)
 
         this.graphics.textures.concrete.color = this.loaders.textureLoader.load('/textures/color/concrete.jpg')
         this.graphics.textures.concrete.normal = this.loaders.textureLoader.load('/textures/normals/concrete.jpg')
         this.enableRepeat(this.graphics.textures.concrete.normal, 1, 1)
         this.enableRepeat(this.graphics.textures.concrete.color, 1, 1)
+
+        this.graphics.textures.background = this.loaders.textureLoader.load('/textures/background/amongus.jpg')
 
         this.load_model({
             path: 'blender/amongus2/scene.gltf',
