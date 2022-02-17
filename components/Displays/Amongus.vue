@@ -144,7 +144,7 @@ export default {
 
             if (!this.interactive) {
                 this.graphics.controls.enabled = false
-                this.graphics.controls.autoRotate = true
+            this.graphics.controls.autoRotate = true
             }
 
             this.graphics.controls.enableZoom = true
@@ -154,7 +154,7 @@ export default {
 
 
             this.graphics.camera.lookAt(this.graphics.models.amongus.position)
-            this.graphics.camera.position.set(0,5,0)
+            this.graphics.camera.position.set(0,6,0)
 
             const geometry = new THREE.CylinderGeometry( 1, 1, 4, 32 );
             const material = new THREE.MeshStandardMaterial({
@@ -241,7 +241,8 @@ export default {
         this.enableRepeat(this.graphics.textures.concrete.color, 1, 1)
 
         this.load_model({
-            path: 'blender/amongus/scene.gltf',
+            path: 'blender/amongus2/scene.gltf',
+            scale: {x: 0.01, y: 0.01, z: 0.01},
             position: {y:2},
             store: "amongus"
         })
