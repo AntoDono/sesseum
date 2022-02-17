@@ -4,7 +4,7 @@
         bg-gradient-to-tr from-pink-500 to-yellow-600 
         transition ease-in-out duration-500 
         rounded-lg text-white p-4" 
-    onclick="Function">{{text}}</button>
+    @click="click">{{text}}</button>
 </template>
 
 <script>
@@ -12,8 +12,12 @@
 export default {
     name: 'GradientButton',
     props:{
-        text: String,
-        callback: Function,
+        text: String
+    },
+    methods:{
+        click(){
+            this.$emit("click")
+        }
     }
 }
 

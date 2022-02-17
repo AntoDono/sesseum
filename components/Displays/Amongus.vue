@@ -10,6 +10,10 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
 export default {
     name: "Amongus",
+    props:{
+        interactive: Boolean,
+        divider: Number,
+    },
     data(){
         return {
             graphics:{
@@ -18,7 +22,7 @@ export default {
                 controls: null,
                 renderer: null,
                 sizes: {
-                    width: window.innerWidth/2,
+                    width: window.innerWidth/this.divider,
                     height: window.innerHeight
                 },
                 lights:{
@@ -33,6 +37,10 @@ export default {
                     floor: {
                         normal: null,
                         color: null
+                    },
+                    concrete: {
+                        normal: null,
+                        color: null
                     }
                 }
             },
@@ -45,7 +53,11 @@ export default {
         }
     },
     methods:{
-        
+        enableRepeat(texture,x=1, y=1){
+            texture.repeat.set(x,y)
+            texture.wrapS = THREE.RepeatWrapping
+            texture.wrapT = THREE.RepeatWrapping
+        },
         addWall(
             {
                 length=10, width=10, color='#444444', 
@@ -58,12 +70,11 @@ export default {
                 new THREE.MeshStandardMaterial({
                     color: color,
                     metalness: metalnaess,
-                    roughness: roughness
+                    roughness: roughness,
+                    map: map,
+                    normalMap: normalMap
                 })
             )
-
-            if (normalMap) wall.normalMap = normalMap
-            if (map) wall.map = map
 
             wall.receiveShadow = true
             wall.rotation.set(rotation.x || 0, rotation.y || 0, rotation.z || 0)
@@ -130,17 +141,26 @@ export default {
             this.graphics.scene.add(this.graphics.camera)
 
             this.graphics.controls = new OrbitControls( this.graphics.camera, canvas );
-            this.graphics.controls.autoRotate = true
+
+            if (!this.interactive) {
+                this.graphics.controls.enabled = false
+                this.graphics.controls.autoRotate = true
+            }
+
             this.graphics.controls.enableZoom = true
-            this.graphics.controls.autoRotateSpeed = 10
+            this.graphics.controls.autoRotateSpeed = 7
             this.graphics.controls.enableDamping = true
+            this.graphics.controls.maxPolarAngle = Math.PI/2.1
+
 
             this.graphics.camera.lookAt(this.graphics.models.amongus.position)
-            this.graphics.camera.position.set(0,6,0)
-            this.graphics.camera.zoom = 1
+            this.graphics.camera.position.set(0,5,0)
 
             const geometry = new THREE.CylinderGeometry( 1, 1, 4, 32 );
-            const material = new THREE.MeshBasicMaterial( {color: "white"} );
+            const material = new THREE.MeshStandardMaterial({
+                map: this.graphics.textures.concrete.color,
+                normalMap: this.graphics.textures.concrete.normal
+            });
             const cylinder = new THREE.Mesh( geometry, material );
             this.graphics.scene.add( cylinder );
 
@@ -149,7 +169,7 @@ export default {
             window.addEventListener('resize', () =>
             {
                 // Update sizes
-                this.graphics.sizes.width = window.innerWidth/2
+                this.graphics.sizes.width = window.innerWidth/this.divider
                 this.graphics.sizes.height = window.innerHeight
 
                 // Update camera
@@ -161,9 +181,9 @@ export default {
                 this.graphics.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
             })
 
-            this.graphics.lights.spotLight = new THREE.SpotLight( 0xffffff, 2.5, 50 ); // Adds spot light
+            this.graphics.lights.spotLight = new THREE.SpotLight( 0xffffff, 5, 70 ); // Adds spot light
             this.graphics.lights.spotLight.angle = Math.PI/16
-            this.graphics.lights.spotLight.position.set( 0, 10, 0 );
+            this.graphics.lights.spotLight.position.set( 0, 15, 0 );
 
             this.graphics.lights.ambientLight = new THREE.AmbientLight( "#b0b0b0" ); // soft white light
 
@@ -172,7 +192,9 @@ export default {
                 length: 100,
                 width: 100,
                 roughness: 0.5,
-                rotation: {x: - Math.PI/2}
+                rotation: {x: - Math.PI/2},
+                map: this.graphics.textures.floor.color,
+                normalMap: this.graphics.textures.floor.normal
             })
 
 
@@ -207,7 +229,16 @@ export default {
         this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader)
 
         this.loaders.textureLoader = new THREE.TextureLoader(this.loaders.loadingManager)
+
         this.graphics.textures.floor.color = this.loaders.textureLoader.load('/textures/color/floor.jpg')
+        this.graphics.textures.floor.normal = this.loaders.textureLoader.load('/textures/normals/floor.jpg')
+        this.enableRepeat(this.graphics.textures.floor.normal, 10, 10)
+        this.enableRepeat(this.graphics.textures.floor.color, 10, 10)
+
+        this.graphics.textures.concrete.color = this.loaders.textureLoader.load('/textures/color/concrete.jpg')
+        this.graphics.textures.concrete.normal = this.loaders.textureLoader.load('/textures/normals/concrete.jpg')
+        this.enableRepeat(this.graphics.textures.concrete.normal, 1, 1)
+        this.enableRepeat(this.graphics.textures.concrete.color, 1, 1)
 
         this.load_model({
             path: 'blender/amongus/scene.gltf',
