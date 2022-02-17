@@ -28,6 +28,12 @@ export default {
                 models:{
                     loaded: [],
                     amongus: null,
+                },
+                textures:{
+                    floor: {
+                        normal: null,
+                        color: null
+                    }
                 }
             },
             loaders:{
@@ -39,6 +45,7 @@ export default {
         }
     },
     methods:{
+        
         addWall(
             {
                 length=10, width=10, color='#444444', 
@@ -51,9 +58,7 @@ export default {
                 new THREE.MeshStandardMaterial({
                     color: color,
                     metalness: metalnaess,
-                    roughness: roughness,
-                    normalMap: normalMap,
-                    map: map
+                    roughness: roughness
                 })
             )
 
@@ -63,6 +68,7 @@ export default {
             wall.receiveShadow = true
             wall.rotation.set(rotation.x || 0, rotation.y || 0, rotation.z || 0)
             wall.position.set(position.x || 0, position.y || 0, position.z || 0)
+
             this.graphics.scene.add(wall)
         },
         load_model(
@@ -115,7 +121,6 @@ export default {
         },
         init(){
 
-        
             const canvas = document.querySelector('canvas.webgl')
             this.graphics.renderer = new THREE.WebGLRenderer({
                 canvas: canvas
@@ -166,8 +171,10 @@ export default {
             this.addWall({
                 length: 100,
                 width: 100,
-                rotation: {x: - Math.PI/2},
+                roughness: 0.5,
+                rotation: {x: - Math.PI/2}
             })
+
 
             this.graphics.scene.add(this.graphics.lights.spotLight)
             this.graphics.scene.add(this.graphics.lights.ambientLight)
@@ -199,7 +206,9 @@ export default {
         this.loaders.gltfLoader = new GLTFLoader(this.loaders.loadingManager)
         this.loaders.gltfLoader.setDRACOLoader(this.loaders.dracoLoader)
 
-        this.loaders.textureLoader = new THREE.TextureLoader(this.load                                                                                                                               )
+        this.loaders.textureLoader = new THREE.TextureLoader(this.loaders.loadingManager)
+        this.graphics.textures.floor.color = this.loaders.textureLoader.load('/textures/color/floor.jpg')
+
         this.load_model({
             path: 'blender/amongus/scene.gltf',
             position: {y:2},
