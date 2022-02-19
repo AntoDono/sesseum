@@ -227,12 +227,11 @@ export default {
             ()=>{ // Done loading callback
                 console.log("Done loading")
                 this.init()
-                this.$emit("loaded")
             },
             (itemUrl, itemsLoaded, itemsTotal)=>{ // Progress call back
                 let percent = itemsLoaded/itemsTotal
                 console.log(`Current loading progress: ${percent}`)
-                this.$emit('loading', percent)
+                this.$emit('loaded', percent)
             }
         )
 

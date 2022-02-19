@@ -1,21 +1,22 @@
 <template>
     <div>
-        <div class="transition-all duration-1000 ease-out z-10 relative top-0 right-14 slant skew-x-6 bg-gradient-to-bl from-torange to-tdred h-screen w-7/12" id="intro">
+        <div>
+            <div class="transition-all duration-1000 ease-out z-10 relative top-0 right-14 slant skew-x-6 bg-gradient-to-bl from-torange to-tdred h-screen w-7/12" ref="intro">
 
-        </div>
-        <div class="z-10 absolute top-0 left-0 h-screen w-6/12">
-            <div class="relative top-96 left">
-                <h2 class="w-10/12 text-5xl font-redressed text-white">{{text}}</h2>
-                <GradientButton @click="demo" class="relative top-8" :text="'View Demo →'" id="demo"/>
             </div>
+            <div class="z-10 absolute top-0 left-0 h-screen w-6/12">
+                <div class="relative top-96 left">
+                    <h2 class="w-10/12 text-5xl font-redressed text-white">{{text}}</h2>
+                    <div ref="demo">
+                        <GradientButton @click="demo" class="relative top-8" :text="'View Demo →'"/>
+                    </div>
+                </div>
+            </div>
+            <client-only>
+                <Amongus :divider="2" :interactive="false" class="z-0 absolute top-0 right-0" @loaded="loaded"/>
+            </client-only>
+            <Loading ref="loadscreen" :percent="percent"/>
         </div>
-        <!-- <div class="z-0 absolute top-0 right-0">
-            <img class="h-screen" src="../assets/images/amongus.jpg">
-        </div> -->
-        <client-only>
-            <Amongus :divider="2" :interactive="false" class="z-0 absolute top-0 right-0" @loaded="loaded"/>
-        </client-only>
-        <Loading ref="loadscreen"/>
     </div>
 </template>
 
@@ -28,7 +29,8 @@ export default {
     name: "Main",
     data(){
         return {
-            text: "Susseum, where Sus is a lifestyle."
+            text: "Susseum, where Sus is a lifestyle.",
+            percent: 0
         }
     },
     components: {
@@ -37,16 +39,16 @@ export default {
         Loading
     },
     methods:{
-        loaded(){
-            this.$refs.loadscreen.loaded()
+        loaded(percent){
+            this.percent = percent
         },
         sleep(milliseconds){
             return new Promise(resolve => setTimeout(resolve, milliseconds))
         },
         async demo(){
             this.text = "Loading Demo..."
-            document.getElementById("intro").classList.toggle("hide")
-            document.getElementById("demo").remove()
+            this.$refs.intro.classList.toggle("hide")
+            this.$refs.demo.classList.toggle("hidden")
             await this.sleep(500)
             this.$router.push("demo")
         }
