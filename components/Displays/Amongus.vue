@@ -154,7 +154,11 @@ export default {
             if (!this.interactive) {
                 this.graphics.controls.enabled = false
                 this.graphics.controls.autoRotate = true
+                this.graphics.controls.target = this.graphics.models.amongus.position
+            }else{
+                this.graphics.camera.lookAt(this.graphics.models.amongus.position)
             }
+            this.graphics.camera.position.set(0,6,0)
 
             this.graphics.controls.enableZoom = true
             this.graphics.controls.maxDistance = 50
@@ -164,8 +168,6 @@ export default {
             this.graphics.controls.maxPolarAngle = Math.PI/2.1
 
 
-            this.graphics.camera.position.set(0,6,0)
-            this.graphics.controls.target = this.graphics.models.amongus.position
 
             const geometry = new THREE.CylinderGeometry( 1, 1, 4, 32 );
             const material = new THREE.MeshStandardMaterial({
@@ -225,6 +227,7 @@ export default {
             ()=>{ // Done loading callback
                 console.log("Done loading")
                 this.init()
+                this.$emit("loaded")
             },
             (itemUrl, itemsLoaded, itemsTotal)=>{ // Progress call back
                 let percent = itemsLoaded/itemsTotal

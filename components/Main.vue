@@ -13,14 +13,16 @@
             <img class="h-screen" src="../assets/images/amongus.jpg">
         </div> -->
         <client-only>
-            <Amongus :divider="2" :interactive="false" class="z-0 absolute top-0 right-0"/>
+            <Amongus :divider="2" :interactive="false" class="z-0 absolute top-0 right-0" @loaded="loaded"/>
         </client-only>
+        <Loading ref="loadscreen"/>
     </div>
 </template>
 
 <script>
 import GradientButton from '../components/GradientButton.vue'
 import Amongus from '../components/Displays/Amongus.vue'
+import Loading from '../components/Loading.vue'    
 
 export default {
     name: "Main",
@@ -31,9 +33,13 @@ export default {
     },
     components: {
         GradientButton,
-        Amongus
+        Amongus,
+        Loading
     },
     methods:{
+        loaded(){
+            this.$refs.loadscreen.loaded()
+        },
         sleep(milliseconds){
             return new Promise(resolve => setTimeout(resolve, milliseconds))
         },
