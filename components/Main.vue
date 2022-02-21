@@ -1,9 +1,7 @@
 <template>
     <div>
         <div>
-            <div class="transition-all duration-1000 ease-out z-10 relative top-0 right-14 slant skew-x-6 bg-gradient-to-bl from-torange to-tdred h-screen w-7/12" ref="intro">
-
-            </div>
+            <div class="transition-all duration-1000 ease-out z-10 relative top-0 right-14 slant skew-x-6 bg-gradient-to-bl from-torange to-tdred h-screen w-7/12" ref="intro"/>
             <div class="z-10 absolute top-0 left-0 h-screen w-6/12">
                 <div class="relative top-96 left">
                     <h2 class="w-10/12 text-5xl font-redressed text-white">{{text}}</h2>
@@ -15,8 +13,8 @@
             <client-only>
                 <Amongus :divider="2" :interactive="false" class="z-0 absolute top-0 right-0" @loaded="loaded"/>
             </client-only>
-            <Loading ref="loadscreen" :percent="percent"/>
         </div>
+        <Loading ref="loadscreen" :percent="percent"/>
     </div>
 </template>
 
