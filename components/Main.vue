@@ -1,12 +1,12 @@
 <template>
-    <div>
+    <div class="overflow-x-hidden">
         <div>
             <div class="transition-all duration-1000 ease-out z-10 relative top-0 right-14 slant skew-x-6 bg-gradient-to-bl from-torange to-tdred h-screen w-7/12" ref="intro"/>
             <div class="z-10 absolute top-0 left-0 h-screen w-6/12">
                 <div class="relative top-96 left">
                     <h2 class="w-10/12 text-5xl font-redressed text-white">{{text}}</h2>
                     <div ref="demo">
-                        <GradientButton @click="demo" class="relative top-8" :text="'View Demo →'"/>
+                        <GradientButton @click="demo" class="relative top-8 z-50" :text="'View Demo →'"/>
                     </div>
                 </div>
             </div>
@@ -61,7 +61,7 @@ export default {
 }
 
 .hide{
-    width: 120vw;
+    width: 110vw;
     transform: skewX(0);
 }
 
