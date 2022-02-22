@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full absolute top-0 left-0 z-20 p-2 flex items-center bg-tdark justify-between" >
+    <div class="w-full absolute top-0 left-0 z-40 p-2 flex items-center bg-tdark justify-between" >
         <h1 class="
             text-white text-6xl font-redressed 
             text-transparent bg-clip-text bg-gradient-to-bl from-tred to-torange

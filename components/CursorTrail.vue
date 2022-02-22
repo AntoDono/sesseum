@@ -1,9 +1,5 @@
 <template>
-    <div>
-        <p>Move your mouse...</p>
-            <svg ref="cursorsvg">
-        </svg>
-    </div>
+    <svg class="fixed top-0 left-0 w-full h-full z-30" ref="cursorsvg"/>
 </template>
 
 <script>
@@ -13,56 +9,67 @@ export default {
     name: "CursorTrail",
     methods:{
         init(){
-            
             gsap.defaults({ease: 'none'});
 
             var svgns = "http://www.w3.org/2000/svg";
-            var root = this.$refs.cursorsvg
+            var root = document.querySelector("svg");
+            var ease = 0.75;
             
             var pointer = { 
-                x: null, 
-                y: null 
+                x: 0, 
+                y: 0 
             };
 
-            var prevPointer = {
-                x: null,
-                y: null,
-            }
-
-            var lines = []
-
             window.addEventListener("mousemove", function(event) {
-                if (pointer.x==null){
-                    prevPointer.x = event.clientX
-                    prevPointer.y = event.clientY
-                }else{
-                    prevPointer.x = pointer.x
-                    prevPointer.y = pointer.y
-                }
                 pointer.x = event.clientX;
                 pointer.y = event.clientY;
-                let line = createLine(prevPointer, pointer)
-                root.appendChild(line)
-                lines.push(line)
-                if (lines.length > 100){
-                    lines[0].remove()
-                    lines.shift()
-                }
             });
 
+            var leader = pointer;
 
-            function createLine(prevPointer, pointer) {
-                var line = document.createElementNS(svgns, "line");
-                line.setAttribute('x1', prevPointer.x)
-                line.setAttribute('y1', prevPointer.y)
-                line.setAttribute('x2', pointer.x)
-                line.setAttribute('y2', pointer.y)
-                line.setAttribute('stroke', 'rgb(255,0,0)')
-                line.setAttribute('stroke-width', 1);
-                
-                return line
+            var total = 100;
+            for (var i = 0; i < total; i++) {
+            leader = createLine(leader, i);
             }
 
+            function createLine(leader, i) {
+            
+                var line = document.createElementNS(svgns, "line");
+                line.setAttribute('stroke', 'rgb(245, 178, 78)')
+                line.setAttribute('stroke-width', 7);
+
+                root.appendChild(line);
+                
+                gsap.set(line, { x: -15, y: -15, alpha: (total - i) / total });
+                
+                gsap.to(line, {
+                    duration: 1000,
+                    x: "+=1",
+                    y: "+=1",
+                    repeat: -1,
+                    modifiers: {
+                    x: function() {
+                        let posX = gsap.getProperty(line, "x");
+                        let leaderX = gsap.getProperty(leader, "x");
+                        
+                        var x = posX + (leaderX - posX) * ease;
+                        line.setAttribute("x2", leaderX - x);
+                        return x;
+                    },
+                    y: function() {
+                        let posY = gsap.getProperty(line, "y");
+                        let leaderY = gsap.getProperty(leader, "y");
+                        
+                        var y = posY + (leaderY - posY) * ease;
+                        line.setAttribute("y2", leaderY - y);
+                        return y;
+                    }
+                    }
+                });  
+                
+                
+                return line;
+            }
         }
     },
     mounted(){
@@ -71,28 +78,3 @@ export default {
 }
 </script>
 
-<style scoped>
-
-body {
-  overflow: hidden;
-}
-
-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-}
-
-line {
-  stroke: #3f51b5;
-  stroke-width: 2;
-}
-
-p {
-  margin: 10px;
-  color: #999;
-}
-
-</style>

@@ -6,13 +6,13 @@
     <client-only>
       <CursorTrail/>
     </client-only>
-    <!-- <Navbar/>
+    <Navbar/>
     <Main/>
     <div>
       <Section :title="'The Most Unique Museum'" :center="true" :reverse="true"/>
       <Section :title="'Learn the Sus Culture'" :reverse="true"/>
       <Section :title="'Our Mission'"/>
-    </div> -->
+    </div>
   </div>
 </template>
 
