@@ -19,6 +19,9 @@ export default {
             graphics:{
                 scene: null,
                 camera: null,
+                cameraInitialPosition:{
+                    y: 6
+                },
                 controls: null,
                 renderer: null,
                 fog: null,
@@ -44,7 +47,7 @@ export default {
                         color: null
                     },
                     background: null
-                }
+                },
             },
             loaders:{
                 gltfLoader: null,
@@ -150,15 +153,19 @@ export default {
             this.graphics.scene.add(this.graphics.camera)
 
             this.graphics.controls = new OrbitControls( this.graphics.camera, canvas );
+            this.graphics.camera.position.set(0,this.graphics.cameraInitialPosition.y,0)
+            
 
             if (!this.interactive) {
                 this.graphics.controls.enabled = false
                 this.graphics.controls.autoRotate = true
                 this.graphics.controls.target = this.graphics.models.amongus.position
+                window.addEventListener('scroll', (event)=>{
+                    this.graphics.camera.position.y = this.graphics.cameraInitialPosition.y + 0.002 * window.scrollY
+                })
             }else{
                 this.graphics.camera.lookAt(this.graphics.models.amongus.position)
             }
-            this.graphics.camera.position.set(0,6,0)
 
             this.graphics.controls.enableZoom = true
             this.graphics.controls.maxDistance = 50

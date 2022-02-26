@@ -12,10 +12,12 @@ module.exports = {
         'redressed': ['Redressed', 'cursive']
       },
       colors: {
-        'tdark': '#325863',
-        'torange': '#D99A3D',
-        'tred': '#F75151',
-        'tdred': '#8F282B'
+        'primaryDark': '#1e2328',
+        'secondaryDark': '#2a2e34',
+        'lightgray': '#3b3f46',
+        'primaryYellow': '#f5a302',
+        'secondaryYellow': '#f5b301',
+        'lightyellow': '#f3d053',
       }
     },
   },
