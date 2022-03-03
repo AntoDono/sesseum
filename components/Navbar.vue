@@ -8,7 +8,7 @@
         <ul class="list-none">
             <a href="/demo" class="text-primaryYellow text-1xl p-1 inline font-redressed transition duration-150 border-b-2 border-transparent hover:border-primaryYellow">Demo</a>
             <a href="." class="text-primaryYellow text-1xl p-1 inline font-redressed transition duration-150 border-b-2 border-transparent hover:border-primaryYellow">About</a>
-            <a href="." class="text-primaryYellow text-1xl p-1 inline font-redressed transition duration-150 border-b-2 border-transparent hover:border-primaryYellow">Solutions</a>
+            <a href="./shop" class="text-primaryYellow text-1xl p-1 inline font-redressed transition duration-150 border-b-2 border-transparent hover:border-primaryYellow">Products</a>
         </ul>
     </div>
 </template>
