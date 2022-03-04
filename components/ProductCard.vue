@@ -1,23 +1,27 @@
 <template>
-    <div class="shadow-xl h-96 w-80 flex items-center flex-col">
-        <div class="title">
-            <h2>{{title}}</h2>
+    <div class="rounded-xl shadow-xl card flex items-center flex-col w-72 p-3 shadow-gray-300">
+        <div class="text-2xl">
+            {{title}}
         </div>
-        <div class="image flex items-center">
-            <img :src="require(`~/assets/images/${image}.jpg`)" alt="imageAlt" class="h-5/6 rounded-xl"/>
+        <div>
+            <img :src="require(`~/assets/images/${image}.jpg`)" class="rounded-xl"/>
         </div>
-        <div class="description">
-            <p class="pl-1.5 pr-1.5">
-                {{description}}
-            </p>
+        <div>
+            {{description}}
         </div>
-        <div class="button">
+        <div>
+            <div>
+                ${{price}}
+            </div>
+        </div>
+        <div>
             <GradientButton :text="'Purchase'"/>
         </div>
     </div>
 </template>
 
 <script>
+// require(`~/assets/images/${image}.jpg`)
 import GradientButton from '../components/GradientButton.vue'
 
 export default {
@@ -41,6 +45,10 @@ export default {
         description:{
             type: String,
             default: "Product Description here"
+        },
+        price:{
+            type: Number,
+            default: 100000
         }
     }
 }
@@ -48,20 +56,6 @@ export default {
 
 <style scoped>
 
-.title{
-    height: 5%;
-}
 
-.image{
-    height: 70%;
-}
-
-.description{
-    height: 10%;
-}
-
-.button{
-    height: 15%;
-}
 
 </style>
